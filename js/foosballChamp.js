@@ -45,7 +45,7 @@ function FoosballChampViewModel(){
 	];
 
 	var gameData = [
-		{"teamA":{"players":[{"firstName":"James","lastName":"McFee","city":"Boston","state":"MA","wins":1,"losses":20},null,null,null],"score":8},"teamB":{"players":[{"firstName":"Joseph","lastName":"Smithers","city":"Boston","state":"MA","wins":3,"losses":1},null,null,null],"score":3}},{"teamA":{"players":[{"firstName":"Tom","lastName":"Tomers","city":"Boston","state":"MA","wins":2,"losses":3},{"firstName":"Joe","lastName":"Smith","city":"Boston","state":"MA","wins":0,"losses":1},null,null],"score":1},"teamB":{"players":[{"firstName":"Joseph","lastName":"Smithers","city":"Boston","state":"MA","wins":3,"losses":1},{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":5},null,null],"score":10}}
+		{"teamA":{"players":[{"firstName":"James","lastName":"McFee","city":"Boston","state":"MA","wins":1,"losses":20}],"score":10},"teamB":{"players":[{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":6}],"score":5}},{"teamA":{"players":[{"firstName":"Joe","lastName":"Smith","city":"Boston","state":"MA","wins":0,"losses":1}],"score":2},"teamB":{"players":[{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":6}],"score":10}},{"teamA":{"players":[{"firstName":"James","lastName":"McFee","city":"Boston","state":"MA","wins":1,"losses":20},{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":5}],"score":10},"teamB":{"players":[{"firstName":"Tom","lastName":"Tomers","city":"Boston","state":"MA","wins":2,"losses":3},{"firstName":"Joseph","lastName":"Smithers","city":"Boston","state":"MA","wins":2,"losses":1}],"score":9}}
 	];
 
 	self.states = ko.observableArray(["AK","AL","AR","AS","AZ","CA","CO","CT","DC","DE","FL","GA",
@@ -99,20 +99,26 @@ function FoosballChampViewModel(){
 	self.playerB4 = ko.observable();
 
 	self.teamA = ko.computed(function(){
-		return [
-				self.playerA1(),
-				self.playerA2(),
-				self.playerA3(),
-				self.playerA4()
-				]
+		if(self.numPlayers() === 2){
+			return [self.playerA1()];
+		}
+		else if(self.numPlayers() === 4){
+			return [self.playerA1(), self.playerA2()];
+		}
+		else if(self.numPlayers() === 8){
+			return [self.playerA1(), self.playerA2(), self.playerA3(), self.playerA4()];
+		}
 	});
 	self.teamB = ko.computed(function(){
-		return [
-				self.playerB1(),
-				self.playerB2(),
-				self.playerB3(),
-				self.playerB4()
-				]
+		if(self.numPlayers() === 2){
+			return [self.playerB1()];
+		}
+		else if(self.numPlayers() === 4){
+			return [self.playerB1(), self.playerB2()];
+		}
+		else if(self.numPlayers() === 8){
+			return [self.playerB1(), self.playerB2(), self.playerB3(), self.playerB4()];
+		}
 	});
 
 	self.teamAScore = ko.observable();
@@ -137,8 +143,7 @@ function FoosballChampViewModel(){
 		};
 
 		console.log(newPlayer);
-		self.players().push(newPlayer);
-		debugger;
+		self.players.push(newPlayer);
 		statusMessage("Player Saved!");
 	};
 
@@ -157,17 +162,21 @@ function FoosballChampViewModel(){
 		};
 
 		console.log(newGame);
+
+		// Add wins and losses to corresponding players
 		if(self.teamAScore() > self.teamBScore()){
 			addWin(self.teamA());
 			addLoss(self.teamB());
+			addGame(newGame);
 		}
 		else if(self.teamBScore() > self.teamAScore()){
 			addWin(self.teamB());
 			addLoss(self.teamA());
+			addGame(newGame);
 		}
-		self.games().push(newGame);
-		statusMessage("Game Saved!");
-		console.log(self.games());
+		else{
+			statusMessage('Game cannot end in a tie!');
+		}
 	};
 
 	function addWin(team){
@@ -195,6 +204,14 @@ function FoosballChampViewModel(){
 		self.players.push(player);
 		return player;
 	};
+
+	function addGame(game){
+		self.games.push(game);
+		self.teamAScore(null);
+		self.teamBScore(null);
+		self.numPlayers(null);
+		statusMessage("Game Saved!");
+	}
 
 	function statusMessage(text){
 		$("#status-message").text(text);

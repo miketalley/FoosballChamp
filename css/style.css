@@ -1,3 +1,11 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 a {
 	text-decoration: none;
 }
@@ -143,6 +151,53 @@ a {
 	margin: 5px;
 }
 
+.view-games-container {
+	width: 70%;
+	margin: 0 auto;
+}
+
+.games-list {
+	width: 100%;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 10px 10px 10px 20px;
+}
+
+.games-list-team-a {
+}
+
+.games-list-team-b {
+}
+
+.games-list-game {
+	display: block;
+}
+
+.games-list-game-row {
+	display: inline-block;
+	width: 100%;
+	border: 1px solid black;
+	margin: 2px;
+	border-radius: 3px;
+}
+
+.team-players {
+	float: left;
+	padding: 10px;
+	width: 40%;
+}
+
+.team-score {
+	float: left;
+	padding: 10px;
+	width: 10%;
+}
+
+.games-list-game-row .team-header {
+	font-weight: bold;
+	background: #37b9fa;
+}
+
 .view-ranking-container {
 	width: 70%;
 	margin: 0 auto;
@@ -150,6 +205,9 @@ a {
 
 .view-ranking-list {
 	font-size: 20px;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 10px;
 }
 
 .view-ranking-list-player-row.ranking-header {
@@ -165,12 +223,16 @@ a {
 	padding: 3px;
 }
 
+.view-ranking-player-data.rank {
+	width: 10%;
+}
+
 .view-ranking-player-data.firstName {
-	width: 25%;
+	width: 22%;
 }
 
 .view-ranking-player-data.lastName {
-	width: 25%;
+	width: 22%;
 }
 
 .view-ranking-player-data.city {

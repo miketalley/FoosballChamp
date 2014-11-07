@@ -144,20 +144,37 @@
 
 	<script type="text/html" id="view-games">
 		<div class="view-games-container">
-			<div class="games-list" data-bind="foreach: games">
-				<div class="games-list-team-a">
-					<div data-bind="foreach: teamA.players">
-						<div data-bind="text: firstName"></div>
+			<h2>Games List <span id='status-message'></span></h2>
+			<div class="games-list" >
+				<div class='games-list-game-row'>
+					<div class="games-list-team-a">
+						<div class='team-players team-header'>Team A Players</div>
+						<div class='team-score team-header'>Score</div>
 					</div>
-					<div data-bind="text: teamA.score"></div>
+					<div class="games-list-team-b">
+						<div class='team-players team-header'>Team B Players</div>
+						<div class='team-score team-header'>Score</div>
+					</div>
 				</div>
-				<div class="games-list-team-b">
-					<div data-bind="foreach: teamB.players"></div>
-						<div data-bind="text: firstName"></div>
-					<div data-bind="text: teamB.score"></div>
+			
+				<div class='games-list-game' data-bind="foreach: games">
+					<div class='games-list-game-row'>
+						<div class="games-list-team-a">
+							<div class='team-players' data-bind="foreach: teamA.players">
+								<div data-bind="text: firstName + lastName + ' (' + city + ', ' + state + ')'"></div>
+							</div>
+							<div class='team-score' data-bind="text: teamA.score"></div>
+						</div>
+						<div class="games-list-team-b">
+							<div class='team-players' data-bind="foreach: teamB.players">
+								<div data-bind="text: firstName + lastName + ' (' + city + ', ' + state + ')'"></div>
+							</div>
+							<div class='team-score' data-bind="text: teamB.score"></div>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+		</div> 
 	</script>
 
 
@@ -185,6 +202,7 @@
 			</h2>
 			<div class='view-ranking-list'>
 				<div class="view-ranking-list-player-row ranking-header">
+					<div class='view-ranking-player-data rank'>Rank</div>
 					<div class='view-ranking-player-data firstName'>First Name</div>
 					<div class='view-ranking-player-data lastName'>Last Name</div>
 					<div class='view-ranking-player-data city'>City</div>
@@ -194,6 +212,7 @@
 				</div>
 				<div data-bind="foreach: rankedPlayers">
 					<div class="view-ranking-list-player-row">
+						<div class='view-ranking-player-data rank' data-bind="text: $index() + 1"></div>
 						<div class='view-ranking-player-data firstName' data-bind="text: firstName"></div>
 						<div class='view-ranking-player-data lastName' data-bind="text: lastName"></div>
 						<div class='view-ranking-player-data city' data-bind="text: city"></div>
