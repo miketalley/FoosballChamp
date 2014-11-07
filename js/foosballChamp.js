@@ -1,135 +1,17 @@
 function FoosballChampViewModel(){
-	var self = this;
+	var self = this,
+		fb;
 
-	var playerData = [
-		{
-			firstName: 'Mike',
-			lastName: 'Talley',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Nic',
-			lastName: 'Mendoza',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'David',
-			lastName: 'Miranda',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Nick',
-			lastName: 'Bagley',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Bryan',
-			lastName: 'Pedlar',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Max',
-			lastName: 'Faingezicht',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Adam',
-			lastName: 'Blake',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Emily',
-			lastName: 'Weisberg',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Jason',
-			lastName: 'Dolan',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'August',
-			lastName: 'Radville',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Ransom',
-			lastName: 'Cook',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Daniel',
-			lastName: 'Kelly',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Chris',
-			lastName: 'Wight',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		},
-		{
-			firstName: 'Erik',
-			lastName: 'Haan',
-			city: 'Boston',
-			state: 'MA',
-			wins: 0,
-			losses: 0
-		}
-	];
-
-	var gameData = [
-		{"teamA":{"players":[{"firstName":"James","lastName":"McFee","city":"Boston","state":"MA","wins":1,"losses":20}],"score":10},"teamB":{"players":[{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":6}],"score":5}},{"teamA":{"players":[{"firstName":"Joe","lastName":"Smith","city":"Boston","state":"MA","wins":0,"losses":1}],"score":2},"teamB":{"players":[{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":6}],"score":10}},{"teamA":{"players":[{"firstName":"James","lastName":"McFee","city":"Boston","state":"MA","wins":1,"losses":20},{"firstName":"Frank","lastName":"Rogers","city":"Boston","state":"MA","wins":4,"losses":5}],"score":10},"teamB":{"players":[{"firstName":"Tom","lastName":"Tomers","city":"Boston","state":"MA","wins":2,"losses":3},{"firstName":"Joseph","lastName":"Smithers","city":"Boston","state":"MA","wins":2,"losses":1}],"score":9}}
-	];
-
+	// #####  Observable constants  #####
 	self.states = ko.observableArray(["AK","AL","AR","AS","AZ","CA","CO","CT","DC","DE","FL","GA",
 		"GU","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT",
 		"NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","PW","RI","SC","SD","TN",
 		"TX","UT","VA","VI","VT","WA","WI","WV","WY"]);
-
 	self.numPlayerOptions = ko.observableArray([2, 4, 8]);
 	self.scorePossibilities = ko.observableArray([0,1,2,3,4,5,6,7,8,9,10]);
 
-	self.games = ko.observableArray(gameData);
-	self.players = ko.observableArray(playerData);
+	// #####  Player variables  #####
+	self.players = ko.observableArray();
 	self.alphabeticalPlayers = ko.computed(function(){
 		return self.players.sort(function(playera, playerb){
 			return playera.lastName == playerb.lastName ? (playera.firstName == playerb.firstName ? 0 : (playera.firstName < playerb.firstName ? -1 : 1)) : (playera.lastName < playerb.lastName ? -1 : 1);
@@ -144,22 +26,14 @@ function FoosballChampViewModel(){
 			};
 		});
 	});
-
 	self.playerFirstName = ko.observable();
 	self.playerLastName = ko.observable();
 	self.playerCity = ko.observable();
 	self.playerState = ko.observable();
 
+	// #####  Game variables  #####
+	self.games = ko.observableArray();
 	self.numPlayers = ko.observable();
-	self.numPlayersArray = ko.computed(function(){
-		var array = [];
-
-		for(var i = 1; i <= self.numPlayers() / 2; i++){
-			array.push(i);
-		}
-
-		return array;
-	});
 
 	self.playerA1 = ko.observable();
 	self.playerA2 = ko.observable();
@@ -181,6 +55,7 @@ function FoosballChampViewModel(){
 			return [self.playerA1(), self.playerA2(), self.playerA3(), self.playerA4()];
 		}
 	});
+
 	self.teamB = ko.computed(function(){
 		if(self.numPlayers() === 2){
 			return [self.playerB1()];
@@ -199,6 +74,7 @@ function FoosballChampViewModel(){
 	self.gameLocation = ko.observable();
 
 	self.currentTemplate = ko.observable('home');
+	setupFirebase();
 
 	self.changeTemplate = function(newTemplate){
 		self.currentTemplate(newTemplate);
@@ -214,7 +90,6 @@ function FoosballChampViewModel(){
 			losses: 0
 		};
 
-		console.log(newPlayer);
 		self.players.push(newPlayer);
 		statusMessage("Player Saved!");
 	};
@@ -232,8 +107,6 @@ function FoosballChampViewModel(){
 			dateTime: self.gameDateTime(),
 			location: self.gameLocation()
 		};
-
-		console.log(newGame);
 
 		// Add wins and losses to corresponding players
 		if(self.teamAScore() > self.teamBScore()){
@@ -283,13 +156,29 @@ function FoosballChampViewModel(){
 		self.teamBScore(null);
 		self.numPlayers(null);
 		statusMessage("Game Saved!");
-	}
+	};
 
 	function statusMessage(text){
 		$("#status-message").text(text);
 		setTimeout(function(){
 			$("#status-message").text("");
 		}, 1000);
+	};
+
+	function setupFirebase(){
+		fb = new Firebase('https://blistering-fire-3558.firebaseio.com/');
+		fb.on("value", function(response){
+			var fbData = response.val();
+			self.games(fbData.games);
+			self.players(fbData.players);
+		});
+	};
+
+	function saveFirebase(){
+		fb.set({
+			games: self.games(),
+			players: self.players()
+		});
 	};
 }
 
