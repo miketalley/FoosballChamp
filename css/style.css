@@ -24,6 +24,11 @@ a {
 .content {
 }
 
+.subscript {
+	font-size: 11px;
+	vertical-align: top;
+}
+
 .foosball-image {
 	margin: 0px -10px 0px -18px;
 }

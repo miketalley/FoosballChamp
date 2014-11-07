@@ -3,44 +3,116 @@ function FoosballChampViewModel(){
 
 	var playerData = [
 		{
-			firstName: 'Joe',
-			lastName: 'Smith',
+			firstName: 'Mike',
+			lastName: 'Talley',
 			city: 'Boston',
 			state: 'MA',
 			wins: 0,
 			losses: 0
 		},
 		{
-			firstName: 'Frank',
-			lastName: 'Rogers',
-			city: 'Boston',
-			state: 'MA',
-			wins: 3,
-			losses: 5
-		},
-		{
-			firstName: 'Joseph',
-			lastName: 'Smithers',
-			city: 'Boston',
-			state: 'MA',
-			wins: 2,
-			losses: 0
-		},
-		{
-			firstName: 'James',
-			lastName: 'McFee',
+			firstName: 'Nic',
+			lastName: 'Mendoza',
 			city: 'Boston',
 			state: 'MA',
 			wins: 0,
-			losses: 20
+			losses: 0
 		},
 		{
-			firstName: 'Tom',
-			lastName: 'Tomers',
+			firstName: 'David',
+			lastName: 'Miranda',
 			city: 'Boston',
 			state: 'MA',
-			wins: 2,
-			losses: 2
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Nick',
+			lastName: 'Bagley',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Bryan',
+			lastName: 'Pedlar',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Max',
+			lastName: 'Faingezicht',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Adam',
+			lastName: 'Blake',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Emily',
+			lastName: 'Weisberg',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Jason',
+			lastName: 'Dolan',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'August',
+			lastName: 'Radville',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Ransom',
+			lastName: 'Cook',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Daniel',
+			lastName: 'Kelly',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Chris',
+			lastName: 'Wight',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
+		},
+		{
+			firstName: 'Erik',
+			lastName: 'Haan',
+			city: 'Boston',
+			state: 'MA',
+			wins: 0,
+			losses: 0
 		}
 	];
 
@@ -59,8 +131,8 @@ function FoosballChampViewModel(){
 	self.games = ko.observableArray(gameData);
 	self.players = ko.observableArray(playerData);
 	self.alphabeticalPlayers = ko.computed(function(){
-		return self.players().sort(function(playera, playerb){
-			return playera.lastName === playerb.lastName ? (playera.firstName === playerb.firstName ? 0 : (playera.firstName < playerb.firstName ? 1 : -1)) : (playera.lastName < playerb.lastName ? 1 : -1);
+		return self.players.sort(function(playera, playerb){
+			return playera.lastName == playerb.lastName ? (playera.firstName == playerb.firstName ? 0 : (playera.firstName < playerb.firstName ? -1 : 1)) : (playera.lastName < playerb.lastName ? -1 : 1);
 		});
 	});
 	self.rankedPlayers = ko.computed(function(){
