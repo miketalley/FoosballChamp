@@ -147,7 +147,7 @@ function FoosballChampViewModel(){
 		
 		self.players.splice(playerIndex, 1);
 		self.players.push(player);
-		return player;
+		saveFirebase();
 	};
 
 	function addGame(game){
@@ -156,6 +156,7 @@ function FoosballChampViewModel(){
 		self.teamBScore(null);
 		self.numPlayers(null);
 		statusMessage("Game Saved!");
+		saveFirebase();
 	};
 
 	function statusMessage(text){
