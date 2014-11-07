@@ -1,0 +1,265 @@
+a {
+	text-decoration: none;
+}
+
+.html {
+	background-color: black;
+}
+
+.header {
+	width: 90%;
+	margin: 0 auto;
+	display: block;
+	padding: 5px 0px 0px 0px;
+}
+
+.content {
+}
+
+.foosball-image {
+	margin: 0px -10px 0px -18px;
+}
+
+.foosball-image img {
+	height: 36px;
+	width: 36px;
+	margin-bottom: -2px;
+}
+
+.button-container {
+	padding: 10px 0px 10px 0px;
+	text-align: center;
+}
+
+.submit-button {
+	margin-top: 20px;
+}
+
+.new-player-container {
+	width: 30%;
+	margin: 0 auto;
+}
+
+.new-player-form-container {
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 10px 10px 10px 20px;
+}
+
+.new-game-container {
+	width: 60%;
+	margin: 0 auto;
+}
+
+.new-game-form-container {
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 10px 10px 10px 20px;
+}
+
+.new-player-form-container input {
+	padding: 5px;
+	display: block;
+	border-radius: 5px;
+	margin: 5px;
+	width: 90%;
+}
+
+.new-player-form-container select {
+	padding: 2px;
+	display: block;
+	border-radius: 5px;
+	margin: 5px;
+	width: 50%;
+}
+
+.new-player-form-container button {
+	display: block;
+	border-radius: 5px;
+	width: 65%;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+.new-game-form-container input {
+	padding: 5px;
+	display: block;
+	border-radius: 5px;
+	margin: 5px;
+	width: 90%;
+}
+
+.new-game-form-container button {
+	display: block;
+	border-radius: 5px;
+	width: 65%;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+.num-player-select {
+	padding: 2px;
+	display: block;
+	border-radius: 5px;
+	margin: 5px;
+	width: 40%;
+}
+
+.team-a-players {
+	float: left;
+	width: 40%;
+	margin: 10px;
+}
+
+.team-b-players {
+	float: left;
+	width: 40%;
+	margin: 10px;
+}
+
+.team-a-score {
+	float: left;
+	width: 40%;
+	margin: 10px;
+}
+
+.team-b-score {
+	float: left;
+	width: 40%;
+	margin: 10px;
+}
+
+.player-select-input {
+	padding: 5px;
+	border-radius: 5px;
+	width: 100%;
+	margin: 5px;
+}
+
+.score-select-input {
+	padding: 5px;
+	border-radius: 5px;
+	width: 50%;
+	margin: 5px;
+}
+
+.view-ranking-container {
+	width: 70%;
+	margin: 0 auto;
+}
+
+.view-ranking-list {
+	font-size: 20px;
+}
+
+.view-ranking-list-player-row.ranking-header {
+	font-weight: bold;
+}
+
+.view-ranking-list-player-row {
+	display: block;
+}
+
+.view-ranking-player-data {
+	display: inline-block;
+	padding: 3px;
+}
+
+.view-ranking-player-data.firstName {
+	width: 25%;
+}
+
+.view-ranking-player-data.lastName {
+	width: 25%;
+}
+
+.view-ranking-player-data.city {
+	width: 15%;
+}
+
+.view-ranking-player-data.state {
+	width: 10%;
+}
+
+.view-ranking-player-data.wins {
+	width: 8%;
+}
+
+.view-ranking-player-data.losses {
+	width: 8%;
+}
+
+#title {
+	-webkit-text-stroke-width: 1px;
+	-webkit-text-stroke-color: black;
+	font-family: Arial, sans-serif;
+	line-height: 1em;
+	color: #37b9fa;
+	font-weight: bold;
+	padding: 10px;
+	margin: 20px 20px 20px 20%;
+	font-size: 61px;
+	text-shadow: 0px 0px 0 rgb(-28,-28,100),
+	  -1px 0px 0 rgb(-45,-45,83),
+	  -2px 0px 0 rgb(-63,-63,65),
+	  -2px 0px 0 rgb(-81,-81,47), 
+	  -3px 0px 0 rgb(-99,-99,29),
+	  -3px 0px 4px rgba(0,0,0,0.2),
+	  -4px 0px 1px rgba(0,0,0,0.5),
+	  0px 0px 4px rgba(0,0,0,.2);
+}
+
+#subtitle {
+	font-size: 30px;
+	font-family: Arial, sans-serif;
+	color: black;
+}
+
+#status-message {
+	float: right;
+	color: red;
+	font-size: 20px;
+	font-weight: bold;
+	margin: 10px;
+}
+
+#foosball-table {
+	width: 35%;
+	height: auto;
+	margin: 0 auto;
+}
+
+#foosball-table img {
+	width: 100%;
+	height: auto;
+	box-shadow: 4px 4px 5px black;
+	border: 1px solid black;
+}
+
+button {
+	font-size: 20px;
+	padding: 5px 10px 5px 10px;
+	border-radius: 5px;
+	margin: 10px;
+    background: #37b9fa; /* Old browsers */
+    background: -moz-linear-gradient(top, #37b9fa 0%, #1d9fdf 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#37b9fa), color-stop(100%,#1d9fdf)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #37b9fa 0%,#1d9fdf 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #37b9fa 0%,#1d9fdf 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #37b9fa 0%,#1d9fdf 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #37b9fa 0%,#1d9fdf 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#37b9fa', endColorstr='#1d9fdf',GradientType=0 ); /* IE6-9 */
+    border-bottom: 1px solid #0070A3;
+}
+
+button:hover {
+    background: #50c2fb; /* Old browsers */
+    background: -moz-linear-gradient(top, #50c2fb 0%, #32a9e4 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#50c2fb), color-stop(100%,#32a9e4)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #50c2fb 0%,#32a9e4 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #50c2fb 0%,#32a9e4 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #50c2fb 0%,#32a9e4 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #50c2fb 0%,#32a9e4 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#50c2fb', endColorstr='#32a9e4',GradientType=0 ); /* IE6-9 */
+    border-bottom: 1px solid #0082BC;
+}

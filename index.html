@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+	<script type="text/javascript" src-"js/jquery.datetimepicker.js"></script>
+	<script type="text/javascript" src="http://knockoutjs.com/downloads/knockout-3.2.0.js"></script>
+	<script type="text/javascript" src="https://cdn.firebase.com/js/client/1.1.3/firebase.js"></script>
+	<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase-auth-client.js"></script>
+	<script type="text/javascript" src="js/foosballChamp.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css">
+
+	<title>Foosball Champ</title>
+</head>
+<body>
+
+	<div class="main-container">
+		
+		<div class='header'>
+			<a href="#" id="title" data-bind="click: changeTemplate.bind($data, 'home')">
+				F
+				<span class="foosball-image">
+					<img src="images/foosball.jpg"><img src="images/foosball.jpg">
+				</span>
+				sball Champ
+			</a>
+			<div class="button-container">
+				<button type="button" data-bind="click: changeTemplate.bind($data, 'new-game')">New Game</button>
+				<button type="button" data-bind="click: changeTemplate.bind($data, 'view-games')">View Games</button>
+				<button type="button" data-bind="click: changeTemplate.bind($data, 'new-player')">New Player</button>
+				<button type="button" data-bind="click: changeTemplate.bind($data, 'view-ranking')">View Ranking</button>
+			</div>
+		</div>
+
+		<div class='content' data-bind="template: currentTemplate">
+		</div>
+
+	</div>
+
+	<script type="text/html" id="home">
+		<div class="home-container">
+			<div id="foosball-table">
+				<img src="images/foosballtable.jpg">
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="new-game">
+		<div class="new-game-container">
+			<h2>Log New Game Data <span id='status-message'></span></h2>
+			<div class='new-game-form-container'>
+				<form class='new-game-form' data-bind="submit: addNewGame">
+					<h2>Number of Players</h2>
+					<select class="num-player-select" data-bind="options: numPlayerOptions, optionsCaption: 'Number of Players', value: numPlayers"/>
+					<div class='team-container'>
+						<div class="team-a-players">
+							<h2 data-bind="visible: numPlayers()">Team A</h2>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team A - Player 1',
+								value: playerA1,
+								visible: numPlayers()">
+							</select>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team A - Player 2',
+								value: playerA2,
+								visible: numPlayers() > 3">
+							</select>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team A - Player 3',
+								value: playerA3,
+								visible: numPlayers() > 7">
+							</select>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team A - Player 4',
+								value: playerA4,
+								visible: numPlayers() > 7">
+							</select>
+						</div>
+						<div class="team-b-players">
+							<h2 data-bind="visible: numPlayers()">Team B</h2>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team B - Player 1',
+								value: playerB1,
+								visible: numPlayers()">
+							</select>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team B - Player 2',
+								value: playerB2,
+								visible: numPlayers() > 3">
+							</select>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team B - Player 3',
+								value: playerB3,
+								visible: numPlayers() > 7">
+							</select>
+							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+								optionsText: function(item) {
+									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
+								},
+								optionsCaption: 'Team B - Player 4',
+								value: playerB4,
+								visible: numPlayers() > 7">
+							</select>
+						</div>
+					</div>
+					<div class='score-container'>
+						<div class="team-a-score">
+							<h2 data-bind="visible: numPlayers()">Score</h2>
+							<select class="score-select-input" data-bind="options: scorePossibilities, optionsCaption: 'Select Score', value: teamAScore, visible: numPlayers()"></select>
+						</div>
+						<div class="team-b-score">
+							<h2 data-bind="visible: numPlayers()">Score</h2>
+							<select class="score-select-input" data-bind="options: scorePossibilities, optionsCaption: 'Select Score', value: teamBScore, visible: numPlayers()"></select>
+						</div>
+					</div>
+					<button class='submit-button' type="submit" data-bind="visible: numPlayers()">Submit Game Data</button>
+				</form>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="view-games">
+		<div class="view-games-container">
+			<div class="games-list" data-bind="foreach: games">
+				<div class="games-list-team-a">
+					<div data-bind="foreach: teamA.players">
+						<div data-bind="text: firstName"></div>
+					</div>
+					<div data-bind="text: teamA.score"></div>
+				</div>
+				<div class="games-list-team-b">
+					<div data-bind="foreach: teamB.players"></div>
+						<div data-bind="text: firstName"></div>
+					<div data-bind="text: teamB.score"></div>
+				</div>
+			</div>
+		</div>
+	</script>
+
+
+	<script type="text/html" id="new-player">
+		<div class="new-player-container">
+			<h2>Add a New Player
+				<span id='status-message'></span>
+			</h2>
+			<div class='new-player-form-container'>
+				<form class='new-player-form' data-bind="submit: addNewPlayer">
+					<input type="text" data-bind="value: playerFirstName" placeholder="First Name"></input>
+					<input type="text" data-bind="value: playerLastName" placeholder="Last Name"></input>
+					<input type="text" data-bind="value: playerCity" placeholder="City"></input>
+					<select data-bind="options: states, optionsCaption: 'State', value: playerState"></select>
+					<button type="submit">Submit</button>
+				</form>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="view-ranking">
+		<div class="view-ranking-container">
+			<h2>Player Rankings
+				<span id='status-message'></span>
+			</h2>
+			<div class='view-ranking-list'>
+				<div class="view-ranking-list-player-row ranking-header">
+					<div class='view-ranking-player-data firstName'>First Name</div>
+					<div class='view-ranking-player-data lastName'>Last Name</div>
+					<div class='view-ranking-player-data city'>City</div>
+					<div class='view-ranking-player-data state'>State</div>
+					<div class='view-ranking-player-data wins'>Wins</div>
+					<div class='view-ranking-player-data losses'>Losses</div>
+				</div>
+				<div data-bind="foreach: rankedPlayers">
+					<div class="view-ranking-list-player-row">
+						<div class='view-ranking-player-data firstName' data-bind="text: firstName"></div>
+						<div class='view-ranking-player-data lastName' data-bind="text: lastName"></div>
+						<div class='view-ranking-player-data city' data-bind="text: city"></div>
+						<div class='view-ranking-player-data state' data-bind="text: state"></div>
+						<div class='view-ranking-player-data wins' data-bind="text: wins"></div>
+						<div class='view-ranking-player-data losses' data-bind="text: losses"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+
+</body>
+</html>
