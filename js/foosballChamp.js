@@ -12,19 +12,25 @@ function FoosballChampViewModel(){
 
 	// #####  Player variables  #####
 	self.players = ko.observableArray();
+	self.playersObject = ko.observable();
 	self.alphabeticalPlayers = ko.computed(function(){
 		return self.players.sort(function(playera, playerb){
 			return playera.lastName == playerb.lastName ? (playera.firstName == playerb.firstName ? 0 : (playera.firstName < playerb.firstName ? -1 : 1)) : (playera.lastName < playerb.lastName ? -1 : 1);
 		});
 	});
 	self.rankedPlayers = ko.computed(function(){
-		return self.players().sort(function(playera, playerb){
-			return rankingScore(playera) === rankingScore(playerb) ? 0 : (rankingScore(playera) < rankingScore(playerb) ? 1 : -1);
+		// if(self.players().length > 1){
+		// 	return self.players().sort(function(playera, playerb){
+		// 		return rankingScore(playera) === rankingScore(playerb) ? 0 : (rankingScore(playera) < rankingScore(playerb) ? 1 : -1);
 
-			function rankingScore(player){
-				return (player.wins * 2) + (player.wins + player.losses);
-			};
-		});
+		// 		function rankingScore(player){
+		// 			return (player.wins * 2) + (player.wins + player.losses);
+		// 		};
+		// 	});
+		// }
+		// else if(self.players()){
+			return self.players();
+		// }
 	});
 	self.playerFirstName = ko.observable();
 	self.playerLastName = ko.observable();
@@ -90,7 +96,8 @@ function FoosballChampViewModel(){
 			losses: 0
 		};
 
-		self.players.push(newPlayer);
+		self.players().push(newPlayer);
+		fbPlayers.push(newPlayer);
 		statusMessage("Player Saved!");
 	};
 
@@ -103,9 +110,10 @@ function FoosballChampViewModel(){
 			teamB: {
 				players: self.teamB(),
 				score: self.teamBScore()
-			},
-			dateTime: self.gameDateTime(),
-			location: self.gameLocation()
+			}
+			// ,
+			// dateTime: self.gameDateTime(),
+			// location: self.gameLocation()
 		};
 
 		// Add wins and losses to corresponding players
@@ -145,25 +153,26 @@ function FoosballChampViewModel(){
 	function updatePlayer(player){
 		var playerIndex = self.players.indexOf(player);
 
-		self.players.splice(playerIndex, 1);
-		self.players.push(player);
-		fbPlayers.push(player);
+		debugger;
+		// self.players().splice(playerIndex, 1);
+		// self.players()[playerIndex](player);
+		// fbPlayers[playerIndex] = player;
 	};
 
 	function addGame(game){
-		self.games.push(game);
+		self.games().push(game);
+		fbGames.push(game);
 		self.teamAScore(null);
 		self.teamBScore(null);
 		self.numPlayers(null);
 		statusMessage("Game Saved!");
-		fbGames.push(game);
 	};
 
 	function statusMessage(text){
 		$("#status-message").text(text);
 		setTimeout(function(){
 			$("#status-message").text("");
-		}, 1000);
+		}, 1500);
 	};
 
 	function setupFirebase(){
@@ -173,10 +182,16 @@ function FoosballChampViewModel(){
 
 		fbPromise.done(function(response){
 				if(response && response.games){
-					self.games(response.games);
+					for(game in response.games){
+						self.games().push(response.games[game]);
+					}
 				}
 				if(response && response.players){
-					self.players(response.players);
+					self.playersObject(response.players);
+					self.players(Object.keys(response.players));
+					// for(player in response.players){
+					// 	self.players().push(response.players[player]);
+					// }
 				}
 			});
 	};
