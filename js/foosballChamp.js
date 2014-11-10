@@ -20,7 +20,7 @@ function FoosballChampViewModel(){
 	self.rankedPlayers = ko.computed(function(){
 		return self.players().sort(function(playera, playerb){
 			return rankingScore(playera) === rankingScore(playerb) ? 0 : (rankingScore(playera) < rankingScore(playerb) ? 1 : -1);
-			
+
 			function rankingScore(player){
 				return (player.wins * 2) + (player.wins + player.losses);
 			};
@@ -144,10 +144,10 @@ function FoosballChampViewModel(){
 
 	function updatePlayer(player){
 		var playerIndex = self.players.indexOf(player);
-		
+
 		self.players.splice(playerIndex, 1);
 		self.players.push(player);
-		saveFirebase();
+		fbPlayers.push(player);
 	};
 
 	function addGame(game){
@@ -156,7 +156,7 @@ function FoosballChampViewModel(){
 		self.teamBScore(null);
 		self.numPlayers(null);
 		statusMessage("Game Saved!");
-		saveFirebase();
+		fbGames.push(game);
 	};
 
 	function statusMessage(text){
@@ -167,19 +167,18 @@ function FoosballChampViewModel(){
 	};
 
 	function setupFirebase(){
-		fb = new Firebase('https://blistering-fire-3558.firebaseio.com/');
-		fb.on("value", function(response){
-			var fbData = response.val();
-			self.games(fbData.games);
-			self.players(fbData.players);
-		});
-	};
+		fbPlayers = new Firebase('https://blistering-fire-3558.firebaseio.com/players');
+		fbGames = new Firebase('https://blistering-fire-3558.firebaseio.com/games');
+		var fbPromise = $.get('https://blistering-fire-3558.firebaseio.com/.json');
 
-	function saveFirebase(){
-		fb.set({
-			games: self.games(),
-			players: self.players()
-		});
+		fbPromise.done(function(response){
+				if(response && response.games){
+					self.games(response.games);
+				}
+				if(response && response.players){
+					self.players(response.players);
+				}
+			});
 	};
 }
 

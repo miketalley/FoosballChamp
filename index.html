@@ -5,8 +5,7 @@
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 	<script type="text/javascript" src-"js/jquery.datetimepicker.js"></script>
 	<script type="text/javascript" src="http://knockoutjs.com/downloads/knockout-3.2.0.js"></script>
-	<script type="text/javascript" src="https://cdn.firebase.com/js/client/1.1.3/firebase.js"></script>
-	<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase-auth-client.js"></script>
+	<script type="text/javascript" src="js/firebase.js"></script>
 	<script type="text/javascript" src="js/foosballChamp.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -17,7 +16,7 @@
 <body>
 
 	<div class="main-container">
-		
+
 		<div class='header'>
 			<a href="#" id="title" data-bind="click: changeTemplate.bind($data, 'home')">
 				F
@@ -58,7 +57,7 @@
 					<div class='team-container'>
 						<div class="team-a-players">
 							<h2 data-bind="visible: numPlayers()">Team A</h2>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -66,7 +65,7 @@
 								value: playerA1,
 								visible: numPlayers()">
 							</select>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -74,7 +73,7 @@
 								value: playerA2,
 								visible: numPlayers() > 3">
 							</select>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -82,7 +81,7 @@
 								value: playerA3,
 								visible: numPlayers() > 7">
 							</select>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -93,7 +92,7 @@
 						</div>
 						<div class="team-b-players">
 							<h2 data-bind="visible: numPlayers()">Team B</h2>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -101,7 +100,7 @@
 								value: playerB1,
 								visible: numPlayers()">
 							</select>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -109,7 +108,7 @@
 								value: playerB2,
 								visible: numPlayers() > 3">
 							</select>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -117,7 +116,7 @@
 								value: playerB3,
 								visible: numPlayers() > 7">
 							</select>
-							<select class="player-select-input" data-bind="options: alphabeticalPlayers,
+							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
 								optionsText: function(item) {
 									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
 								},
@@ -157,8 +156,8 @@
 						<div class='team-score team-header'>Score</div>
 					</div>
 				</div>
-			
-				<div class='games-list-game' data-bind="foreach: games">
+
+				<div class='games-list-game' data-bind="foreach: games().length && games">
 					<div class='games-list-game-row'>
 						<div class="games-list-team-a">
 							<div class='team-players' data-bind="foreach: teamA.players">
@@ -175,7 +174,7 @@
 					</div>
 				</div>
 			</div>
-		</div> 
+		</div>
 	</script>
 
 
@@ -211,7 +210,7 @@
 					<div class='view-ranking-player-data wins'>Wins<span class='subscript'>(+3)</span></div>
 					<div class='view-ranking-player-data losses'>Losses<span class='subscript'>(+1)</span></div>
 				</div>
-				<div data-bind="foreach: rankedPlayers">
+				<div data-bind="foreach: players() && rankedPlayers">
 					<div class="view-ranking-list-player-row">
 						<div class='view-ranking-player-data rank' data-bind="text: $index() + 1"></div>
 						<div class='view-ranking-player-data firstName' data-bind="text: firstName"></div>
