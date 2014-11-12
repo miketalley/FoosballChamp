@@ -10,6 +10,18 @@ a {
 	text-decoration: none;
 }
 
+h2 {
+	font-size: 20px;
+	margin: 5px 0px 10px 0px;
+	padding: 0px;
+}
+
+h3 {
+	font-size: 15px;
+	margin: 2px;
+	padding: 0px;
+}
+
 .html {
 	background-color: black;
 }
@@ -91,7 +103,7 @@ a {
 	border-radius: 5px;
 	width: 65%;
 	margin: 0 auto;
-	margin-top: 30px;
+	margin-top: 15px;
 }
 
 .new-game-form-container input {
@@ -108,6 +120,9 @@ a {
 	width: 65%;
 	margin: 0 auto;
 	margin-top: 30px;
+}
+
+.num-players-container {
 }
 
 .num-player-select {
@@ -153,6 +168,34 @@ a {
 	padding: 5px;
 	border-radius: 5px;
 	width: 50%;
+	margin: 5px;
+}
+
+.date-location-container {
+	width: 100%;
+	margin: 10px;
+	display: inline-block;
+}
+
+.location {
+	float: left;
+	width: 64%;
+}
+
+.date {
+	float: left;
+	width: 20%;
+}
+
+.game-location-input {
+	padding: 0px;
+	border-radius: 2px;
+	margin: 5px;
+}
+
+.game-date-input {
+	padding: 0px;
+	border-radius: 2px;
 	margin: 5px;
 }
 

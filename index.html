@@ -51,75 +51,71 @@
 			<h2>Log New Game Data <span id='status-message'></span></h2>
 			<div class='new-game-form-container'>
 				<form class='new-game-form' data-bind="submit: addNewGame">
-					<h2>Number of Players</h2>
-					<select class="num-player-select" data-bind="options: numPlayerOptions, optionsCaption: 'Number of Players', value: numPlayers"/>
-					<!-- TODO: Add Date and Time Picker -->
+					<div class='num-players-container'>
+						<h2>Number of Players</h2>
+						<select class="num-player-select" data-bind="options: numPlayerOptions, optionsCaption: 'Number of Players', value: numPlayers">
+						</select>
+					</div>
+					<div class='date-location-container'>
+						<div class="location">
+							<h3 data-bind="visible: numPlayers()">Game Location</h3>
+							<input class="game-location-input" type="text" data-bind="value: gameLocation, visible: numPlayers()">
+						</div>
+						<div class="date">
+							<h3 data-bind="visible: numPlayers()">Game Date</h3>
+							<input class="game-date-input" type="date" data-bind="value: gameDate, visible: numPlayers()">
+						</div>
+					</div>
 					<div class='team-container'>
 						<div class="team-a-players">
-							<h2 data-bind="visible: numPlayers()">Team A</h2>
+							<h3 data-bind="visible: numPlayers()">Team A</h3>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team A - Player 1',
 								value: playerA1,
 								visible: numPlayers()">
 							</select>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team A - Player 2',
 								value: playerA2,
 								visible: numPlayers() > 3">
 							</select>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team A - Player 3',
 								value: playerA3,
 								visible: numPlayers() > 7">
 							</select>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team A - Player 4',
 								value: playerA4,
 								visible: numPlayers() > 7">
 							</select>
 						</div>
 						<div class="team-b-players">
-							<h2 data-bind="visible: numPlayers()">Team B</h2>
+							<h3 data-bind="visible: numPlayers()">Team B</h3>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team B - Player 1',
 								value: playerB1,
 								visible: numPlayers()">
 							</select>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team B - Player 2',
 								value: playerB2,
 								visible: numPlayers() > 3">
 							</select>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team B - Player 3',
 								value: playerB3,
 								visible: numPlayers() > 7">
 							</select>
 							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: function(item) {
-									return item.lastName + ', ' + item.firstName + ' (' + item.city + ', ' + item.state + ')';
-								},
+								optionsText: formatName.bind($data, $data),
 								optionsCaption: 'Team B - Player 4',
 								value: playerB4,
 								visible: numPlayers() > 7">
@@ -128,11 +124,11 @@
 					</div>
 					<div class='score-container'>
 						<div class="team-a-score">
-							<h2 data-bind="visible: numPlayers()">Score</h2>
+							<h3 data-bind="visible: numPlayers()">Score</h3>
 							<select class="score-select-input" data-bind="options: scorePossibilities, optionsCaption: 'Select Score', value: teamAScore, visible: numPlayers()"></select>
 						</div>
 						<div class="team-b-score">
-							<h2 data-bind="visible: numPlayers()">Score</h2>
+							<h3 data-bind="visible: numPlayers()">Score</h3>
 							<select class="score-select-input" data-bind="options: scorePossibilities, optionsCaption: 'Select Score', value: teamBScore, visible: numPlayers()"></select>
 						</div>
 					</div>

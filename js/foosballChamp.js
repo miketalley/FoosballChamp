@@ -1,6 +1,7 @@
 function FoosballChampViewModel(){
 	var self = this,
-		fb;
+		fbPlayers = 'https://blistering-fire-3558.firebaseio.com/players',
+		fbGames = 'https://blistering-fire-3558.firebaseio.com/games';
 
 	// #####  Observable constants  #####
 	self.states = ko.observableArray(["AK","AL","AR","AS","AZ","CA","CO","CT","DC","DE","FL","GA",
@@ -12,33 +13,20 @@ function FoosballChampViewModel(){
 
 	// #####  Player variables  #####
 	self.players = ko.observableArray();
-	self.playersObject = ko.observable();
-	self.alphabeticalPlayers = ko.computed(function(){
-		return self.players.sort(function(playera, playerb){
-			return playera.lastName == playerb.lastName ? (playera.firstName == playerb.firstName ? 0 : (playera.firstName < playerb.firstName ? -1 : 1)) : (playera.lastName < playerb.lastName ? -1 : 1);
-		});
-	});
-	self.rankedPlayers = ko.computed(function(){
-		// if(self.players().length > 1){
-		// 	return self.players().sort(function(playera, playerb){
-		// 		return rankingScore(playera) === rankingScore(playerb) ? 0 : (rankingScore(playera) < rankingScore(playerb) ? 1 : -1);
+	self.playersData = ko.observable();
 
-		// 		function rankingScore(player){
-		// 			return (player.wins * 2) + (player.wins + player.losses);
-		// 		};
-		// 	});
-		// }
-		// else if(self.players()){
-			return self.players();
-		// }
-	});
+	self.games = ko.observableArray();
+	self.gamesData = ko.observable();
+
+	self.alphabeticalPlayers = ko.observableArray();
+	self.rankedPlayers = ko.observableArray();
+	self.nickName = ko.observable();
 	self.playerFirstName = ko.observable();
 	self.playerLastName = ko.observable();
 	self.playerCity = ko.observable();
 	self.playerState = ko.observable();
 
 	// #####  Game variables  #####
-	self.games = ko.observableArray();
 	self.numPlayers = ko.observable();
 
 	self.playerA1 = ko.observable();
@@ -76,7 +64,7 @@ function FoosballChampViewModel(){
 
 	self.teamAScore = ko.observable();
 	self.teamBScore = ko.observable();
-	self.gameDateTime = ko.observable();
+	self.gameDate = ko.observable();
 	self.gameLocation = ko.observable();
 
 	self.currentTemplate = ko.observable('home');
@@ -88,6 +76,7 @@ function FoosballChampViewModel(){
 
 	self.addNewPlayer = function(){
 		var newPlayer = {
+			nickName: self.nickName(),
 			firstName: self.playerFirstName(),
 			lastName: self.playerLastName(),
 			city: self.playerCity(),
@@ -96,8 +85,8 @@ function FoosballChampViewModel(){
 			losses: 0
 		};
 
-		self.players().push(newPlayer);
-		fbPlayers.push(newPlayer);
+		var fbPlayersLocation = new Firebase(fbPlayers);
+		fbPlayersLocation.push(newPlayer, updatePlayersData);
 		statusMessage("Player Saved!");
 	};
 
@@ -132,42 +121,82 @@ function FoosballChampViewModel(){
 		}
 	};
 
-	function addWin(team){
-		$.each(team, function(i, player){
-			if(player){
-				player.wins += 1;
-				updatePlayer(player);
-			}
-		});
-	};
+	self.formatName = function(viewModel, playerID){
+		var player = self.playersData()[playerID];
 
-	function addLoss(team){
-		$.each(team, function(i, player){
-			if(player){
-				player.losses += 1;
-				updatePlayer(player);
-			}
-		});
-	};
-
-	function updatePlayer(player){
-		var playerIndex = self.players.indexOf(player);
-
-		debugger;
-		// self.players().splice(playerIndex, 1);
-		// self.players()[playerIndex](player);
-		// fbPlayers[playerIndex] = player;
-	};
+		return "'" + player.nickName + "'" + " - " + player.lastName + ", " + player.firstName + " (" + player.city + ", " + player.state + ")";
+	}
 
 	function addGame(game){
-		self.games().push(game);
-		fbGames.push(game);
+		var fbGamesLocation = new Firebase(fbGames);
+		
+		fbGamesLocation.push(game, updateGamesData);
+
 		self.teamAScore(null);
 		self.teamBScore(null);
 		self.numPlayers(null);
 		statusMessage("Game Saved!");
 	};
 
+	function addWin(team){
+		$.each(team, function(i, playerID){
+			if(playerID){
+				var updatedPlayerObject = self.playerData()[playerID]
+				updatedPlayerObject.wins += 1;
+				updatePlayer(playerID, updatedPlayerObject);
+			}
+		});
+	};
+
+	function addLoss(team){
+		$.each(team, function(i, playerID){
+			if(playerID){
+				var updatedPlayerObject = self.playerData()[playerID]
+				updatedPlayerObject.wins -= 1;
+				updatePlayer(playerID, updatedPlayerObject);
+			}
+		});
+	};
+
+	function updatePlayer(playerID, player){
+		var playerToUpdate = new Firebase(fbPlayers + playerID);
+
+		playerToUpdate.update(player, updatePlayersData);
+	};
+
+	function rankPlayers(){
+		var allPlayers = [];
+		
+		$.each(self.players(), function(i, player){
+			allPlayers.push(self.playersData()[player]);
+		});
+
+		if(allPlayers.length > 1){
+			self.rankedPlayers(allPlayers.sort(function(playera, playerb){
+				return rankingScore(playera) === rankingScore(playerb) ? 0 : (rankingScore(playera) < rankingScore(playerb) ? 1 : -1);
+
+				function rankingScore(player){
+					return (player.wins * 2) + (player.wins + player.losses);
+				};
+			}));
+		}
+		else if(allPlayers.length === 1){
+			self.rankedPlayers(allPlayers);
+		}
+	};
+
+	function alphabetizePlayers(){
+		var alphabeticalListOfPlayers = self.players.sort(function(playera, playerb){
+			playera = self.playersData()[playera];
+			playerb = self.playersData()[playerb];
+
+			return playera.lastName == playerb.lastName ? (playera.firstName == playerb.firstName ? 0 : (playera.firstName < playerb.firstName ? -1 : 1)) : (playera.lastName < playerb.lastName ? -1 : 1);
+		});
+
+		self.alphabeticalPlayers(alphabeticalListOfPlayers);
+	};
+
+	// Sends a status message to the screen for 1.5 seconds
 	function statusMessage(text){
 		$("#status-message").text(text);
 		setTimeout(function(){
@@ -175,25 +204,36 @@ function FoosballChampViewModel(){
 		}, 1500);
 	};
 
+	// Gets data from Firebase for games and players
 	function setupFirebase(){
-		fbPlayers = new Firebase('https://blistering-fire-3558.firebaseio.com/players');
-		fbGames = new Firebase('https://blistering-fire-3558.firebaseio.com/games');
-		var fbPromise = $.get('https://blistering-fire-3558.firebaseio.com/.json');
+		updateGamesData();
+		updatePlayersData();
+	};
 
-		fbPromise.done(function(response){
-				if(response && response.games){
-					for(game in response.games){
-						self.games().push(response.games[game]);
-					}
-				}
-				if(response && response.players){
-					self.playersObject(response.players);
-					self.players(Object.keys(response.players));
-					// for(player in response.players){
-					// 	self.players().push(response.players[player]);
-					// }
-				}
-			});
+	// Sets self.gamesData to games object and sets self.games to array of keys in object
+	function updateGamesData(){
+		var allGamesData = $.get(fbGames + '.json');
+
+		allGamesData.done(function(response){
+			if(response){
+				self.gamesData(response);
+				self.games(Object.keys(response));
+			}
+		});
+	};
+
+	// Sets self.playersData to players object and sets self.players to array of keys in object
+	function updatePlayersData(){
+		var allPlayerData = $.get(fbPlayers + '.json');
+
+		allPlayerData.done(function(response){
+			if(response){
+				self.playersData(response);
+				self.players(Object.keys(response));
+				alphabetizePlayers();
+				rankPlayers();
+			}
+		});
 	};
 }
 
