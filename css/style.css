@@ -272,15 +272,19 @@ h3 {
 }
 
 .view-ranking-player-data.rank {
-	width: 10%;
+	width: 6%;
+}
+
+.view-ranking-player-data.nickName {
+	width: 13%;
 }
 
 .view-ranking-player-data.firstName {
-	width: 22%;
+	width: 18%;
 }
 
 .view-ranking-player-data.lastName {
-	width: 22%;
+	width: 18%;
 }
 
 .view-ranking-player-data.city {
@@ -288,7 +292,7 @@ h3 {
 }
 
 .view-ranking-player-data.state {
-	width: 10%;
+	width: 8%;
 }
 
 .view-ranking-player-data.wins {
