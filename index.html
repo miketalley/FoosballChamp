@@ -181,6 +181,7 @@
 			</h2>
 			<div class='new-player-form-container'>
 				<form class='new-player-form' data-bind="submit: addNewPlayer">
+					<input type="text" data-bind="value: playerNickName" placeholder="Nickname"></input>
 					<input type="text" data-bind="value: playerFirstName" placeholder="First Name"></input>
 					<input type="text" data-bind="value: playerLastName" placeholder="Last Name"></input>
 					<input type="text" data-bind="value: playerCity" placeholder="City"></input>
@@ -199,6 +200,7 @@
 			<div class='view-ranking-list'>
 				<div class="view-ranking-list-player-row ranking-header">
 					<div class='view-ranking-player-data rank'>Rank</div>
+					<div class='view-ranking-player-data firstName'>Nickname</div>
 					<div class='view-ranking-player-data firstName'>First Name</div>
 					<div class='view-ranking-player-data lastName'>Last Name</div>
 					<div class='view-ranking-player-data city'>City</div>
@@ -209,6 +211,7 @@
 				<div data-bind="foreach: players() && rankedPlayers">
 					<div class="view-ranking-list-player-row">
 						<div class='view-ranking-player-data rank' data-bind="text: $index() + 1"></div>
+						<div class='view-ranking-player-data firstName' data-bind="text: nickName"></div>
 						<div class='view-ranking-player-data firstName' data-bind="text: firstName"></div>
 						<div class='view-ranking-player-data lastName' data-bind="text: lastName"></div>
 						<div class='view-ranking-player-data city' data-bind="text: city"></div>

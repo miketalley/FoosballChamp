@@ -20,7 +20,7 @@ function FoosballChampViewModel(){
 
 	self.alphabeticalPlayers = ko.observableArray();
 	self.rankedPlayers = ko.observableArray();
-	self.nickName = ko.observable();
+	self.playerNickName = ko.observable();
 	self.playerFirstName = ko.observable();
 	self.playerLastName = ko.observable();
 	self.playerCity = ko.observable();
@@ -76,7 +76,7 @@ function FoosballChampViewModel(){
 
 	self.addNewPlayer = function(){
 		var newPlayer = {
-			nickName: self.nickName(),
+			nickName: self.playerNickName(),
 			firstName: self.playerFirstName(),
 			lastName: self.playerLastName(),
 			city: self.playerCity(),
