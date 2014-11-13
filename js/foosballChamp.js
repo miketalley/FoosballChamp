@@ -55,10 +55,12 @@ function FoosballChampViewModel(){
 	self.currentTemplate = ko.observable('home');
 	setupFirebase();
 
+	// Used to control navigation around application
 	self.changeTemplate = function(newTemplate){
 		self.currentTemplate(newTemplate);
 	};
 
+	// Create a new player object with player input values
 	self.addNewPlayer = function(){
 		if(self.playerNickName()){
 			var newPlayer = {
@@ -87,6 +89,7 @@ function FoosballChampViewModel(){
 		}
 	};
 
+	// Create new game object with teams, scores, date, and location
 	self.addNewGame = function(){
 		var d = new Date();
 		var formattedDateNow = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
@@ -120,12 +123,14 @@ function FoosballChampViewModel(){
 		}
 	};
 
+	// Format Name -- "Nickname" - LastName, FirstName (City, State)
 	self.formatName = function(viewModel, playerID){
 		var player = self.playersData()[playerID];
 
 		return "'" + player.nickName + "'" + " - " + player.lastName + ", " + player.firstName + " (" + player.city + ", " + player.state + ")";
 	};
 
+	// Add a new game to Firebase and clear inputs
 	function addGame(game){
 		var fbGamesLocation = new Firebase(fbGames);
 		
@@ -137,6 +142,8 @@ function FoosballChampViewModel(){
 		statusMessage("Game Saved!");
 	}
 
+	// Add a win to each player in the passed array
+	// Congrats!
 	function addWin(playersArray){
 		$.each(playersArray, function(i, playerID){
 			if(playerID){
@@ -147,6 +154,8 @@ function FoosballChampViewModel(){
 		});
 	}
 
+	// Add a loss to each player in the passed array
+	// Sorry guys!
 	function addLoss(playersArray){
 		$.each(playersArray, function(i, playerID){
 			if(playerID){
@@ -157,6 +166,9 @@ function FoosballChampViewModel(){
 		});
 	}
 
+	// Updates a player on firebase using the playerID and setting
+	// the value equal to the passed player parameter
+	// Calls updatePlayersData once Firebase update is complete
 	function updatePlayer(playerID, player){
 		var playerToUpdate = new Firebase(fbPlayers + '/' + playerID);
 
@@ -177,6 +189,7 @@ function FoosballChampViewModel(){
 			self.rankedPlayers(allPlayers.sort(function(playera, playerb){
 				return rankingScore(playera) === rankingScore(playerb) ? 0 : (rankingScore(playera) < rankingScore(playerb) ? 1 : -1);
 
+				// 1 point for each game played, 2 additional points for a win
 				function rankingScore(player){
 					return (player.wins * 2) + (player.wins + player.losses);
 				};
