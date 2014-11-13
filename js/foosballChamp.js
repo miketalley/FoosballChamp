@@ -143,14 +143,13 @@ function FoosballChampViewModel(){
 		$.each(playersArray, function(i, playerID){
 			if(playerID){
 				var updatedPlayerObject = self.playersData()[playerID];
-				updatedPlayerObject.wins -= 1;
+				updatedPlayerObject.losses += 1;
 				updatePlayer(playerID, updatedPlayerObject);
 			}
 		});
 	};
 
 	function updatePlayer(playerID, player){
-		debugger;
 		var playerToUpdate = new Firebase(fbPlayers + '/' + playerID);
 
 		playerToUpdate.update(player, updatePlayersData);
