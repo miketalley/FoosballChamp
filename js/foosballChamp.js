@@ -28,44 +28,6 @@ function FoosballChampViewModel(){
 
 	// #####  Game variables  #####
 	self.numPlayers = ko.observable();
-
-	self.playerA1 = ko.observable();
-	self.playerA2 = ko.observable();
-	self.playerA3 = ko.observable();
-	self.playerA4 = ko.observable();
-	self.playerB1 = ko.observable();
-	self.playerB2 = ko.observable();
-	self.playerB3 = ko.observable();
-	self.playerB4 = ko.observable();
-
-	// self.teamA = ko.computed(function(){
-	// 	if(self.numPlayers() === 2){
-	// 		return [self.playerA1()];
-	// 	}
-	// 	else if(self.numPlayers() === 4){
-	// 		return [self.playerA1(), self.playerA2()];
-	// 	}
-	// 	else if(self.numPlayers() === 8){
-	// 		return [self.playerA1(), self.playerA2(), self.playerA3(), self.playerA4()];
-	// 	}
-	// });
-
-	// self.teamB = ko.computed(function(){
-	// 	if(self.numPlayers() === 2){
-	// 		return [self.playerB1()];
-	// 	}
-	// 	else if(self.numPlayers() === 4){
-	// 		return [self.playerB1(), self.playerB2()];
-	// 	}
-	// 	else if(self.numPlayers() === 8){
-	// 		return [self.playerB1(), self.playerB2(), self.playerB3(), self.playerB4()];
-	// 	}
-	// });
-
-	self.updateTheThing = function(a, b, c){
-		debugger;
-	};
-	
 	self.teamA = ko.observableArray();
 	self.teamB = ko.observableArray();
 
@@ -188,11 +150,15 @@ function FoosballChampViewModel(){
 	};
 
 	function updatePlayer(playerID, player){
-		var playerToUpdate = new Firebase(fbPlayers + playerID);
+		debugger;
+		var playerToUpdate = new Firebase(fbPlayers + '/' + playerID);
 
 		playerToUpdate.update(player, updatePlayersData);
 	};
 
+	// Calculates the rank of each player
+	// 1 point is awarded for each game played
+	// 2 additional points are awarded for each game won
 	function rankPlayers(){
 		var allPlayers = [];
 		
@@ -214,6 +180,7 @@ function FoosballChampViewModel(){
 		}
 	};
 
+	// Sort the self.players() array by the last name, and then first name of each player
 	function alphabetizePlayers(){
 		var alphabeticalListOfPlayers = self.players.sort(function(playera, playerb){
 			playera = self.playersData()[playera];
