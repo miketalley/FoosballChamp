@@ -25,6 +25,7 @@ function FoosballChampViewModel(){
 	self.playerLastName = ko.observable().extend({ required: "Please Enter Player's Last Name."});
 	self.playerCity = ko.observable().extend({ required: "Please Enter Player's City."});
 	self.playerState = ko.observable().extend({ required: "Please Select Player's State."});
+	self.playerEmail = ko.observable();
 
 	// #####  Game variables  #####
 	self.numPlayers = ko.observable();
@@ -59,24 +60,31 @@ function FoosballChampViewModel(){
 	};
 
 	self.addNewPlayer = function(){
-		var newPlayer = {
-			nickName: self.playerNickName(),
-			firstName: self.playerFirstName(),
-			lastName: self.playerLastName(),
-			city: self.playerCity(),
-			state: self.playerState(),
-			wins: 0,
-			losses: 0
-		};
+		if(self.playerNickName()){
+			var newPlayer = {
+				nickName: self.playerNickName(),
+				firstName: self.playerFirstName() || "",
+				lastName: self.playerLastName() || "",
+				city: self.playerCity() || "",
+				state: self.playerState() || "",
+				email: self.playerEmail() || "",
+				wins: 0,
+				losses: 0
+			};
 
-		var fbPlayersLocation = new Firebase(fbPlayers);
-		fbPlayersLocation.push(newPlayer, updatePlayersData);
-		self.playerNickName(null);
-		self.playerFirstName(null);
-		self.playerLastName(null);
-		self.playerCity(null);
-		self.playerState(null);
-		statusMessage("Player Saved!");
+			var fbPlayersLocation = new Firebase(fbPlayers);
+			fbPlayersLocation.push(newPlayer, updatePlayersData);
+			self.playerNickName(null);
+			self.playerFirstName(null);
+			self.playerLastName(null);
+			self.playerCity(null);
+			self.playerState(null);
+			self.playerEmail(null);
+			statusMessage("Player Saved!");
+		}
+		else{
+			statusMessage("Please enter a Nickname!");
+		}
 	};
 
 	self.addNewGame = function(){
@@ -116,7 +124,7 @@ function FoosballChampViewModel(){
 		var player = self.playersData()[playerID];
 
 		return "'" + player.nickName + "'" + " - " + player.lastName + ", " + player.firstName + " (" + player.city + ", " + player.state + ")";
-	}
+	};
 
 	function addGame(game){
 		var fbGamesLocation = new Firebase(fbGames);
@@ -127,7 +135,7 @@ function FoosballChampViewModel(){
 		self.teamBScore(null);
 		self.numPlayers(null);
 		statusMessage("Game Saved!");
-	};
+	}
 
 	function addWin(playersArray){
 		$.each(playersArray, function(i, playerID){
@@ -137,7 +145,7 @@ function FoosballChampViewModel(){
 				updatePlayer(playerID, updatedPlayerObject);
 			}
 		});
-	};
+	}
 
 	function addLoss(playersArray){
 		$.each(playersArray, function(i, playerID){
@@ -147,13 +155,13 @@ function FoosballChampViewModel(){
 				updatePlayer(playerID, updatedPlayerObject);
 			}
 		});
-	};
+	}
 
 	function updatePlayer(playerID, player){
 		var playerToUpdate = new Firebase(fbPlayers + '/' + playerID);
 
 		playerToUpdate.update(player, updatePlayersData);
-	};
+	}
 
 	// Calculates the rank of each player
 	// 1 point is awarded for each game played
@@ -177,7 +185,7 @@ function FoosballChampViewModel(){
 		else if(allPlayers.length === 1){
 			self.rankedPlayers(allPlayers);
 		}
-	};
+	}
 
 	// Sort the self.players() array by the last name, and then first name of each player
 	function alphabetizePlayers(){
@@ -189,7 +197,7 @@ function FoosballChampViewModel(){
 		});
 
 		self.alphabeticalPlayers(alphabeticalListOfPlayers);
-	};
+	}
 
 	// Sends a status message to the screen for 1.5 seconds
 	function statusMessage(text){
@@ -197,13 +205,13 @@ function FoosballChampViewModel(){
 		setTimeout(function(){
 			$("#status-message").text("");
 		}, 1500);
-	};
+	}
 
 	// Gets data from Firebase for games and players
 	function setupFirebase(){
 		updateGamesData();
 		updatePlayersData();
-	};
+	}
 
 	// Sets self.gamesData to games object and sets self.games to array of keys in object
 	function updateGamesData(){
@@ -215,7 +223,7 @@ function FoosballChampViewModel(){
 				self.games(Object.keys(response));
 			}
 		});
-	};
+	}
 
 	// Sets self.playersData to players object and sets self.players to array of keys in object
 	function updatePlayersData(){
@@ -229,7 +237,7 @@ function FoosballChampViewModel(){
 				rankPlayers();
 			}
 		});
-	};
+	}
 }
 
 $(document).ready(function(){
