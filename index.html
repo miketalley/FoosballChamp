@@ -3,13 +3,11 @@
 <head>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
-	<script type="text/javascript" src-"js/jquery.datetimepicker.js"></script>
 	<script type="text/javascript" src="http://knockoutjs.com/downloads/knockout-3.2.0.js"></script>
 	<script type="text/javascript" src="js/firebase.js"></script>
 	<script type="text/javascript" src="js/foosballChamp.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css">
 
 	<title>Foosball Champ</title>
 </head>
@@ -69,57 +67,26 @@
 					<div class='team-container'>
 						<div class="team-a-players">
 							<h3 data-bind="visible: numPlayers()">Team A</h3>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team A - Player 1',
-								value: playerA1,
-								visible: numPlayers()">
-							</select>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team A - Player 2',
-								value: playerA2,
-								visible: numPlayers() > 3">
-							</select>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team A - Player 3',
-								value: playerA3,
-								visible: numPlayers() > 7">
-							</select>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team A - Player 4',
-								value: playerA4,
-								visible: numPlayers() > 7">
-							</select>
+							<div data-bind="foreach: teamA">
+								<select class="player-select-input" data-bind="options: $root.alphabeticalPlayers,
+									optionsText: $root.formatName.bind($data, $data),
+									optionsCaption: 'Team A - Player ' + ($index() + 1),
+									value: $root.teamA()[$index()],
+									visible: $root.numPlayers,
+									event: {change: function(){console.log($root.teamA(), $root.teamA().length)}}">
+								</select>
+							</div>
 						</div>
 						<div class="team-b-players">
 							<h3 data-bind="visible: numPlayers()">Team B</h3>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team B - Player 1',
-								value: playerB1,
-								visible: numPlayers()">
-							</select>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team B - Player 2',
-								value: playerB2,
-								visible: numPlayers() > 3">
-							</select>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team B - Player 3',
-								value: playerB3,
-								visible: numPlayers() > 7">
-							</select>
-							<select class="player-select-input" data-bind="options: players() && alphabeticalPlayers,
-								optionsText: formatName.bind($data, $data),
-								optionsCaption: 'Team B - Player 4',
-								value: playerB4,
-								visible: numPlayers() > 7">
-							</select>
+							<div data-bind="foreach: teamB">
+								<select class="player-select-input" data-bind="options: $root.alphabeticalPlayers,
+									optionsText: $root.formatName.bind($data, $data),
+									optionsCaption: 'Team B - Player ' + ($index() + 1),
+									value: $root.teamB()[$index()],
+									visible: $root.numPlayers">
+								</select>
+							</div>
 						</div>
 					</div>
 					<div class='score-container'>
@@ -156,16 +123,22 @@
 				<div class='games-list-game' data-bind="foreach: games().length && games">
 					<div class='games-list-game-row'>
 						<div class="games-list-team-a">
-							<div class='team-players' data-bind="foreach: teamA.players">
-								<div data-bind="text: firstName + lastName + ' (' + city + ', ' + state + ')'"></div>
+							<div class='team-players' data-bind="foreach: $root.gamesData()[$data].teamA.players">
+								<div data-bind="text: $root.formatName($data, $data)"></div>
 							</div>
-							<div class='team-score' data-bind="text: teamA.score"></div>
+							<div class='team-score' data-bind="text: $root.gamesData()[$data].teamA.score"></div>
 						</div>
 						<div class="games-list-team-b">
-							<div class='team-players' data-bind="foreach: teamB.players">
-								<div data-bind="text: firstName + lastName + ' (' + city + ', ' + state + ')'"></div>
+							<div class='team-players' data-bind="foreach: $root.gamesData()[$data].teamB.players">
+								<div data-bind="text: $root.formatName($data, $data)"></div>
 							</div>
-							<div class='team-score' data-bind="text: teamB.score"></div>
+							<div class='team-score' data-bind="text: $root.gamesData()[$data].teamB.score"></div>
+						</div>
+						<div class="games-list-game-details">
+							<div class='game-location'>
+								<div data-bind="text: 'Location: ' + $root.gamesData()[$data].location"></div>
+							</div>
+							<div class='game-date' data-bind="text: $root.gamesData()[$data].date"></div>
 						</div>
 					</div>
 				</div>

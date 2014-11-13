@@ -229,6 +229,18 @@ h3 {
 	border-radius: 3px;
 }
 
+.game-location {
+	float: left;
+	padding: 10px;
+	width: 30%;
+}
+
+.game-date {
+	float: right;
+	padding: 10px;
+	width: 10%;
+}
+
 .team-players {
 	float: left;
 	padding: 10px;

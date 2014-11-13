@@ -8,8 +8,8 @@ function FoosballChampViewModel(){
 		"GU","HI","IA","ID","IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT",
 		"NC","ND","NE","NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","PW","RI","SC","SD","TN",
 		"TX","UT","VA","VI","VT","WA","WI","WV","WY"]);
-	self.numPlayerOptions = ko.observableArray([2, 4, 8]);
 	self.scorePossibilities = ko.observableArray([0,1,2,3,4,5,6,7,8,9,10]);
+	self.numPlayerOptions = ko.observableArray([2, 4, 8]);
 
 	// #####  Player variables  #####
 	self.players = ko.observableArray();
@@ -20,11 +20,11 @@ function FoosballChampViewModel(){
 
 	self.alphabeticalPlayers = ko.observableArray();
 	self.rankedPlayers = ko.observableArray();
-	self.playerNickName = ko.observable();
-	self.playerFirstName = ko.observable();
-	self.playerLastName = ko.observable();
-	self.playerCity = ko.observable();
-	self.playerState = ko.observable();
+	self.playerNickName = ko.observable().extend({ required: "Please Enter Player's Nickname."});
+	self.playerFirstName = ko.observable().extend({ required: "Please Enter Player's First Name."});
+	self.playerLastName = ko.observable().extend({ required: "Please Enter Player's Last Name."});
+	self.playerCity = ko.observable().extend({ required: "Please Enter Player's City."});
+	self.playerState = ko.observable().extend({ required: "Please Select Player's State."});
 
 	// #####  Game variables  #####
 	self.numPlayers = ko.observable();
@@ -38,32 +38,54 @@ function FoosballChampViewModel(){
 	self.playerB3 = ko.observable();
 	self.playerB4 = ko.observable();
 
-	self.teamA = ko.computed(function(){
-		if(self.numPlayers() === 2){
-			return [self.playerA1()];
+	// self.teamA = ko.computed(function(){
+	// 	if(self.numPlayers() === 2){
+	// 		return [self.playerA1()];
+	// 	}
+	// 	else if(self.numPlayers() === 4){
+	// 		return [self.playerA1(), self.playerA2()];
+	// 	}
+	// 	else if(self.numPlayers() === 8){
+	// 		return [self.playerA1(), self.playerA2(), self.playerA3(), self.playerA4()];
+	// 	}
+	// });
+
+	// self.teamB = ko.computed(function(){
+	// 	if(self.numPlayers() === 2){
+	// 		return [self.playerB1()];
+	// 	}
+	// 	else if(self.numPlayers() === 4){
+	// 		return [self.playerB1(), self.playerB2()];
+	// 	}
+	// 	else if(self.numPlayers() === 8){
+	// 		return [self.playerB1(), self.playerB2(), self.playerB3(), self.playerB4()];
+	// 	}
+	// });
+
+	self.updateTheThing = function(a, b, c){
+		debugger;
+	};
+	
+	self.teamA = ko.observableArray();
+	self.teamB = ko.observableArray();
+
+	// This will adjust the array length to coordinate with view
+	self.numPlayers.subscribe(function(updatedValue){
+		if(self.teamA && (self.teamA().length < (updatedValue / 2))){
+			for(var i = self.teamA().length; i < updatedValue / 2; i++){
+				self.teamA.push(" ");
+				self.teamB.push(" ");
+			}
 		}
-		else if(self.numPlayers() === 4){
-			return [self.playerA1(), self.playerA2()];
-		}
-		else if(self.numPlayers() === 8){
-			return [self.playerA1(), self.playerA2(), self.playerA3(), self.playerA4()];
+		else if(self.teamA() && (self.teamA().length > (updatedValue / 2))){
+			for(var i = self.teamA().length; i > updatedValue / 2; i--){
+				self.teamA.pop();
+				self.teamB.pop();
+			}
 		}
 	});
-
-	self.teamB = ko.computed(function(){
-		if(self.numPlayers() === 2){
-			return [self.playerB1()];
-		}
-		else if(self.numPlayers() === 4){
-			return [self.playerB1(), self.playerB2()];
-		}
-		else if(self.numPlayers() === 8){
-			return [self.playerB1(), self.playerB2(), self.playerB3(), self.playerB4()];
-		}
-	});
-
-	self.teamAScore = ko.observable();
-	self.teamBScore = ko.observable();
+	self.teamAScore = ko.observable().extend({ required: "Please Enter Team A Score."});
+	self.teamBScore = ko.observable().extend({ required: "Please Enter Team B Score."});
 	self.gameDate = ko.observable();
 	self.gameLocation = ko.observable();
 
@@ -87,10 +109,18 @@ function FoosballChampViewModel(){
 
 		var fbPlayersLocation = new Firebase(fbPlayers);
 		fbPlayersLocation.push(newPlayer, updatePlayersData);
+		self.playerNickName(null);
+		self.playerFirstName(null);
+		self.playerLastName(null);
+		self.playerCity(null);
+		self.playerState(null);
 		statusMessage("Player Saved!");
 	};
 
 	self.addNewGame = function(){
+		var d = new Date();
+		var formattedDateNow = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+
 		var newGame = {
 			teamA: {
 				players: self.teamA(),
@@ -99,21 +129,20 @@ function FoosballChampViewModel(){
 			teamB: {
 				players: self.teamB(),
 				score: self.teamBScore()
-			}
-			// ,
-			// dateTime: self.gameDateTime(),
-			// location: self.gameLocation()
+			},
+			date: self.gameDate() || formattedDateNow,
+			location: self.gameLocation() || "Unknown"
 		};
 
 		// Add wins and losses to corresponding players
 		if(self.teamAScore() > self.teamBScore()){
-			addWin(self.teamA());
-			addLoss(self.teamB());
+			addWin(newGame.teamA.players);
+			addLoss(newGame.teamB.players);
 			addGame(newGame);
 		}
 		else if(self.teamBScore() > self.teamAScore()){
-			addWin(self.teamB());
-			addLoss(self.teamA());
+			addWin(newGame.teamB.players);
+			addLoss(newGame.teamA.players);
 			addGame(newGame);
 		}
 		else{
@@ -138,20 +167,20 @@ function FoosballChampViewModel(){
 		statusMessage("Game Saved!");
 	};
 
-	function addWin(team){
-		$.each(team, function(i, playerID){
+	function addWin(playersArray){
+		$.each(playersArray, function(i, playerID){
 			if(playerID){
-				var updatedPlayerObject = self.playerData()[playerID]
+				var updatedPlayerObject = self.playersData()[playerID];
 				updatedPlayerObject.wins += 1;
 				updatePlayer(playerID, updatedPlayerObject);
 			}
 		});
 	};
 
-	function addLoss(team){
-		$.each(team, function(i, playerID){
+	function addLoss(playersArray){
+		$.each(playersArray, function(i, playerID){
 			if(playerID){
-				var updatedPlayerObject = self.playerData()[playerID]
+				var updatedPlayerObject = self.playersData()[playerID];
 				updatedPlayerObject.wins -= 1;
 				updatePlayer(playerID, updatedPlayerObject);
 			}
