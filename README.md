@@ -1,5 +1,5 @@
-FoosballChamp v.01
-==================
+:soccer: FoosballChamp v.01
+====================
 
 FoosballChamp is an application that keeps track of your Foosball games. Some of the key features are...
 
