@@ -31,15 +31,23 @@ function FoosballChampViewModel(){
 	self.numPlayers = ko.observable();
 	self.teamA = ko.observableArray();
 	self.teamB = ko.observableArray();
-
+	self.teamAScore = ko.observable().extend({ required: "Please Enter Team A Score."});
+	self.teamBScore = ko.observable().extend({ required: "Please Enter Team B Score."});
+	self.gameDate = ko.observable();
+	self.gameLocation = ko.observable();
+	
 	// This will adjust the array length to coordinate with view
 	self.numPlayers.subscribe(function(updatedValue){
+		// If selecting higher number of players than previously
+		// selected, push blank placeholders for those player slots
 		if(self.teamA && (self.teamA().length < (updatedValue / 2))){
 			for(var i = self.teamA().length; i < updatedValue / 2; i++){
 				self.teamA.push(" ");
 				self.teamB.push(" ");
 			}
 		}
+		// If selecting lower number of players than previously
+		// selected, pop the extra player slots off the end
 		else if(self.teamA() && (self.teamA().length > (updatedValue / 2))){
 			for(var i = self.teamA().length; i > updatedValue / 2; i--){
 				self.teamA.pop();
@@ -47,12 +55,11 @@ function FoosballChampViewModel(){
 			}
 		}
 	});
-	self.teamAScore = ko.observable().extend({ required: "Please Enter Team A Score."});
-	self.teamBScore = ko.observable().extend({ required: "Please Enter Team B Score."});
-	self.gameDate = ko.observable();
-	self.gameLocation = ko.observable();
 
+	// ####  Navigation variables  ####
 	self.currentTemplate = ko.observable('home');
+
+	// Initialize application data
 	setupFirebase();
 
 	// Used to control navigation around application
@@ -92,6 +99,7 @@ function FoosballChampViewModel(){
 	// Create new game object with teams, scores, date, and location
 	self.addNewGame = function(){
 		var d = new Date();
+		// YYYY-MM-DD Format
 		var formattedDateNow = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
 
 		var newGame = {
@@ -107,7 +115,7 @@ function FoosballChampViewModel(){
 			location: self.gameLocation() || "Unknown"
 		};
 
-		// Add wins and losses to corresponding players
+		// Add win if your team won and loss if your team lost
 		if(self.teamAScore() > self.teamBScore()){
 			addWin(newGame.teamA.players);
 			addLoss(newGame.teamB.players);
@@ -175,9 +183,8 @@ function FoosballChampViewModel(){
 		playerToUpdate.update(player, updatePlayersData);
 	}
 
-	// Calculates the rank of each player
-	// 1 point is awarded for each game played
-	// 2 additional points are awarded for each game won
+	// Calculates the rank of each player and sorts them by rank
+	// descending in rankedPlayers
 	function rankPlayers(){
 		var allPlayers = [];
 		
@@ -212,7 +219,7 @@ function FoosballChampViewModel(){
 		self.alphabeticalPlayers(alphabeticalListOfPlayers);
 	}
 
-	// Sends a status message to the screen for 1.5 seconds
+	// Sends a status message to the #status-message element for 1.5 seconds
 	function statusMessage(text){
 		$("#status-message").text(text);
 		setTimeout(function(){
@@ -226,7 +233,7 @@ function FoosballChampViewModel(){
 		updatePlayersData();
 	}
 
-	// Sets self.gamesData to games object and sets self.games to array of keys in object
+	// Sets self.gamesData to games object and sets self.games to array of keys in that object
 	function updateGamesData(){
 		var allGamesData = $.get(fbGames + '.json');
 
@@ -238,7 +245,7 @@ function FoosballChampViewModel(){
 		});
 	}
 
-	// Sets self.playersData to players object and sets self.players to array of keys in object
+	// Sets self.playersData to players object and sets self.players to array of keys in that object
 	function updatePlayersData(){
 		var allPlayerData = $.get(fbPlayers + '.json');
 
